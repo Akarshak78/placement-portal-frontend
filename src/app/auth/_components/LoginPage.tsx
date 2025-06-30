@@ -20,7 +20,6 @@ import { LoginSchema } from "@/schemas/schema";
 import { api } from "@/lib/api";
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-// import toast from "react-hot-toast";
 import FormError from "@/components/form/FormError";
 import toast from "react-hot-toast";
 import {
@@ -34,6 +33,7 @@ const LoginPage = () => {
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
   });
+
   const [otpReceived, setotpReceived] = useState<boolean>(false);
   const [error, setError] = useState<string>();
   const router = useRouter();
@@ -54,10 +54,12 @@ const LoginPage = () => {
             router.replace("/user/drive");
           }
         } catch (error: any) {
-          if (error.response.status == 403) {
+          toast.dismiss();
+          if (error?.response?.status === 403) {
             setError(error.response.data.error);
-            toast.dismiss();
             toast.error("Verify your Email to Login!");
+          } else {
+            toast.error("Something went wrong. Please try again.");
           }
         }
       });
@@ -66,9 +68,7 @@ const LoginPage = () => {
         toast.loading("Getting OTP...");
         try {
           const res = await api.get("/otp", {
-            params: {
-              email: data.email,
-            },
+            params: { email: data.email },
           });
           toast.dismiss();
           if (res.status === 200) {
@@ -78,10 +78,12 @@ const LoginPage = () => {
         } catch (error: any) {
           toast.dismiss();
           //! FOR TESTING
-          setotpReceived(true)
-          if (error.response.status == 403) {
+          setotpReceived(true);
+          if (error?.response?.status === 403) {
             setError(error.response.data.error);
             toast.error("Verify your Email to Login!");
+          } else {
+            toast.error("Something went wrong. Please try again.");
           }
         }
       });
@@ -124,13 +126,6 @@ const LoginPage = () => {
               onSubmit={form.handleSubmit(onSubmit)}
               className="w-full space-y-2"
             >
-              {/* <Alert>
-                      <BookOpenCheck className="h-4 w-4" />
-                      <AlertTitle>Heads up!</AlertTitle>
-                      <AlertDescription>
-                      You can now make your notes public for the community.
-                      </AlertDescription>
-                      </Alert> */}
               <FormField
                 control={form.control}
                 name="email"

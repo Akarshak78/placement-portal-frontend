@@ -12,7 +12,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import RadarGraph from "./radar-grapgh";
 import MixBarGraph from "./mix-bargraph";
 
@@ -29,14 +28,7 @@ export default function OverViewPage() {
             <Button>Download</Button>
           </div>
         </div>
-        <Tabs defaultValue="overview" className="space-y-4">
-          <TabsList>
-            <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="analytics" disabled>
-              Analytics
-            </TabsTrigger>
-          </TabsList>
-          <TabsContent value="overview" className="space-y-4">
+        <div className="space-y-4">
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -181,8 +173,7 @@ export default function OverViewPage() {
                 <PieGraph />
               </div>
             </div>
-          </TabsContent>
-        </Tabs>
+        </div>
       </div>
     </PageContainer>
   );
